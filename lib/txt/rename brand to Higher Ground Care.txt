@@ -1,0 +1,281 @@
+rename brand to Higher Ground Care
+
+find/replace “Higher Ground Speech Therapy” → “Higher Ground Care”
+
+find/replace “Higher Ground Speech Therapy.” → “Higher Ground Care.”
+
+update logo alt text to “Higher Ground Care logo”
+
+update email everywhere to highergroundslp@gmail.com
+
+in app/config.ts create:
+
+export const BRAND = "Higher Ground Care";
+export const TAGLINE = "speech therapy • family support • community wellness";
+export const CONTACT_EMAIL = "highergroundslp@gmail.com";
+
+
+import BRAND/TAGLINE where the header and footer render names
+
+update global nav to reflect the bigger scope
+
+replace existing header nav with:
+
+// in header/nav
+<NavLink href="/">Home</NavLink>
+<NavLink href="/services">Services</NavLink>
+<NavLink href="/the-center">The Center</NavLink>
+<NavLink href="/community">Community</NavLink>
+<NavLink href="/about">About Us</NavLink>
+<NavLink href="/contact">Contact</NavLink>
+
+
+home page: keep laura at top, add vision teaser blocks
+
+in Home hero, keep portrait and outdoor ScenicBackground
+
+directly under hero, keep Land Acknowledgement short block (with “Learn more” → /land-acknowledgement)
+
+add a “What we offer today” section (evaluations, individual therapy, parent coaching, telehealth) with clear CTA
+
+<section aria-labelledby="today" className="border-b border-app-line">
+  <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
+    <h2 id="today" className="text-2xl sm:text-3xl font-semibold tracking-tight">What we offer today</h2>
+    <p className="mt-2 text-app-muted">Compassionate, evidence-based support you can start now.</p>
+    <ul className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {[
+        ["Evaluations","Comprehensive assessments guiding clear, actionable goals."],
+        ["Individual Therapy","One-on-one sessions matched to your child’s strengths."],
+        ["Parent Coaching","Simple strategies that work at home and school."],
+        ["Telehealth","Secure, convenient sessions for busy families."]
+      ].map(([title,desc])=>(
+        <li key={title} className="rounded-2xl border border-app-line bg-app-soft p-5">
+          <h3 className="text-base font-semibold">{title}</h3>
+          <p className="mt-2 text-sm text-app-muted">{desc}</p>
+        </li>
+      ))}
+    </ul>
+    <a href="/contact" className="mt-6 inline-block rounded-2xl bg-app-ink px-5 py-2.5 text-sm font-medium text-app hover:bg-app-ink/90 focus-visible:ring-2 focus-visible:ring-app-ink/40">Book a free consult</a>
+  </div>
+</section>
+
+
+add a “What we’re building” teaser grid linking to The Center and Community
+
+<section aria-labelledby="future" className="border-b border-app-line bg-app-soft">
+  <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
+    <h2 id="future" className="text-2xl sm:text-3xl font-semibold tracking-tight">What we’re building</h2>
+    <p className="mt-2 text-app-muted">A welcoming campus for whole‑family support.</p>
+    <ul className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {[
+        ["Indoor Therapy Spaces","Low‑sensory rooms, themed environments like Mosgrove.","/the-center#indoor"],
+        ["Outdoor Therapy","Nature‑based sessions with trees, gardens, and gentle trails.","/the-center#outdoor"],
+        ["Parent Palace","A warm space for caregivers to rest, learn, and connect.","/the-center#parent-palace"],
+        ["Group Events","Social communication groups, workshops, and play labs.","/community#groups"],
+        ["Therapy Retreats","Weekend intensives that blend care, rest, and nature.","/community#retreats"],
+        ["Community Impact","Partnerships, accessibility, and local stewardship.","/community"]
+      ].map(([title,desc,href])=>(
+        <li key={title} className="rounded-2xl border border-app-line bg-white/70 p-5">
+          <h3 className="text-base font-semibold">{title}</h3>
+          <p className="mt-2 text-sm text-app-muted">{desc}</p>
+          <a href={href as string} className="mt-3 inline-block text-sm underline text-app-ink/80 hover:text-app-ink">Learn more</a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+
+ensure Mission & Vision section uses the expanded statements you selected
+
+new Services page (current offerings)
+
+create app/services/page.tsx
+
+export const metadata = { title: "Services | Higher Ground Care" };
+export default function ServicesPage(){
+  return (
+    <main className="min-h-dvh bg-app text-app-ink">
+      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
+        <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight">Services</h1>
+        <p className="mt-3 text-app-muted">Simple paths to support—start where you are.</p>
+        <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {/* reuse cards for Evaluations, Individual Therapy, Parent Coaching, Telehealth */}
+        </div>
+        <div className="mt-10 rounded-2xl border border-app-line bg-app-soft p-5">
+          <h2 className="text-xl font-semibold">Insurance & Pricing</h2>
+          <p className="mt-2 text-app-muted">Sliding scale options and superbills available. We can discuss insurance during your consult.</p>
+          <a href="/contact" className="mt-4 inline-block rounded-2xl bg-app-ink px-5 py-2.5 text-sm font-medium text-app">Book a free consult</a>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+
+new The Center page (vision)
+
+create app/the-center/page.tsx with anchors for #indoor, #outdoor, #parent-palace
+
+export const metadata = { title: "The Center | Higher Ground Care" };
+export default function TheCenterPage(){
+  return (
+    <main className="min-h-dvh bg-app text-app-ink">
+      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
+        <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight">The Center</h1>
+        <p className="mt-3 text-app-muted">A place designed for belonging—low‑sensory by default, nature‑connected by design.</p>
+
+        <section id="indoor" className="mt-10 border-t border-app-line pt-10">
+          <h2 className="text-2xl font-semibold">Indoor Therapy Spaces</h2>
+          <p className="mt-2 text-app-muted">Quiet rooms, soft light, themed environments like Mosgrove. Predictable routines and flexible seating.</p>
+          {/* insert concept art or renders here */}
+        </section>
+
+        <section id="outdoor" className="mt-10 border-t border-app-line pt-10">
+          <h2 className="text-2xl font-semibold">Outdoor Therapy</h2>
+          <p className="mt-2 text-app-muted">Therapy in gardens and shaded paths—trees, sensory-friendly textures, and movement options.</p>
+        </section>
+
+        <section id="parent-palace" className="mt-10 border-t border-app-line pt-10">
+          <h2 className="text-2xl font-semibold">Parent Palace</h2>
+          <p className="mt-2 text-app-muted">A welcoming space for caregivers—rest, learning, support groups, tea and calm corners.</p>
+        </section>
+
+        <div className="mt-12 rounded-2xl border border-app-line bg-app-soft p-5">
+          <h3 className="text-xl font-semibold">Timeline</h3>
+          <p className="mt-2 text-app-muted">We’re phasing construction thoughtfully. Subscribe for updates on milestones and openings.</p>
+          <a href="/community#newsletter" className="mt-3 inline-block text-sm underline">Get updates</a>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+
+new Community page (events, groups, retreats, partners)
+
+create app/community/page.tsx with anchors #groups #retreats #newsletter
+
+export const metadata = { title: "Community | Higher Ground Care" };
+export default function CommunityPage(){
+  return (
+    <main className="min-h-dvh bg-app text-app-ink">
+      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
+        <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight">Community</h1>
+        <p className="mt-3 text-app-muted">Connection, learning, and belonging for families and caregivers.</p>
+
+        <section id="groups" className="mt-10 border-t border-app-line pt-10">
+          <h2 className="text-2xl font-semibold">Group Events</h2>
+          <p className="mt-2 text-app-muted">Social communication groups and seasonal workshops.</p>
+        </section>
+
+        <section id="retreats" className="mt-10 border-t border-app-line pt-10">
+          <h2 className="text-2xl font-semibold">Therapy Retreats</h2>
+          <p className="mt-2 text-app-muted">Weekend intensives blending therapy, rest, and nature.</p>
+        </section>
+
+        <section id="newsletter" className="mt-10 border-t border-app-line pt-10">
+          <h2 className="text-2xl font-semibold">Stay Updated</h2>
+          <p className="mt-2 text-app-muted">Join our list to hear about new programs and center milestones.</p>
+          <form className="mt-4 flex max-w-md gap-2" onSubmit={(e)=>e.preventDefault()}>
+            <input type="email" required placeholder="your@email"
+              className="flex-1 rounded-xl border border-app-line bg-white/70 px-3 py-2" />
+            <button className="rounded-xl bg-app-ink px-4 py-2 text-app text-sm">Subscribe</button>
+          </form>
+        </section>
+      </div>
+    </main>
+  );
+}
+
+
+About Us page (story + team)
+
+create app/about/page.tsx
+
+export const metadata = { title: "About Us | Higher Ground Care" };
+export default function AboutPage(){
+  return (
+    <main className="min-h-dvh bg-app text-app-ink">
+      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
+        <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight">About Us</h1>
+        <p className="mt-3 text-app-muted">We’re building a place where care is simple, inclusive, and connected to nature.</p>
+
+        <section className="mt-10 border-t border-app-line pt-10">
+          <h2 className="text-2xl font-semibold">Our Story & Vision</h2>
+          <p className="mt-2 text-app-muted">[insert expanded mission + vision you chose]</p>
+        </section>
+
+        <section className="mt-10 border-t border-app-line pt-10">
+          <h2 className="text-2xl font-semibold">Meet Laura</h2>
+          <p className="mt-2 text-app-muted">Laura Allred, MS, CCC‑SLP… [short bio, credentials, approach]</p>
+        </section>
+      </div>
+    </main>
+  );
+}
+
+
+Contact page (simple)
+
+create app/contact/page.tsx and reuse the Home contact form, include mailto:
+
+export const metadata = { title: "Contact | Higher Ground Care" };
+export default function ContactPage(){
+  return (
+    <main className="min-h-dvh bg-app text-app-ink">
+      <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
+        <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight">Contact</h1>
+        <p className="mt-2 text-app-muted">Have questions or ready to begin? Send a note and we’ll reply with next steps.</p>
+        {/* reuse Field components if shared, else inline inputs */}
+        <p className="mt-6 text-sm"><a className="underline" href="mailto:highergroundslp@gmail.com">Or email us directly: highergroundslp@gmail.com</a></p>
+      </div>
+    </main>
+  );
+}
+
+
+keep Privacy and Land Acknowledgement pages
+
+ensure /privacy and /land-acknowledgement already created per prior task
+
+add footer links to /privacy and /land-acknowledgement
+
+update home mission + vision copy
+
+replace current strings with the expanded mission and vision you chose earlier (or paste both as two short paragraphs)
+
+add “coming soon” labels to future items
+
+on The Center and Community pages, add a small pill:
+
+<span className="ml-2 rounded-full bg-white/70 px-2 py-0.5 text-xs border border-app-line">Coming soon</span>
+
+
+accessibility and performance checklist
+
+one h1 per page; section headings as h2
+
+keep animations behind prefers-reduced-motion
+
+Lighthouse a11y ≥ 95, color contrast AA on green/orange/pink accents
+
+Next/Image for hero portrait with priority and sizes
+
+optional redirects and SEO
+
+if you previously had /hgst paths, add redirects in next.config.js
+
+add metadata titles/descriptions per page (see examples)
+
+final QA
+
+header shows BRAND and TAGLINE
+
+nav routes resolve
+
+home has: hero (Laura + scenic), land acknowledgement short, what we offer today, what we’re building, mission & vision, CTA
+
+/services, /the-center, /community, /about, /contact, /privacy, /land-acknowledgement all render and link from nav/footer
+
+email visible and correct

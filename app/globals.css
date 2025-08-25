@@ -1,0 +1,103 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --app: hsl(180 33% 98%);      /* Light background */
+  --ink: hsl(210 25% 12%);      /* Dark text */
+  --muted: hsl(210 10% 35%);    /* Muted text */
+  --line: hsl(200 20% 90%);     /* Light borders */
+  --soft: hsl(180 33% 96%);     /* Soft backgrounds */
+  --pink: hsl(340 80% 80%);     /* Pink accent */
+  --orange: hsl(30 80% 80%);    /* Orange accent */
+  --green: hsl(140 50% 75%);    /* Green accent */
+}
+
+.dark:root {
+  --app: hsl(210 15% 10%);      /* Dark background */
+  --ink: hsl(0 0% 98%);         /* Light text */
+  --muted: hsl(210 10% 70%);    /* Light muted text */
+  --line: hsl(210 10% 20%);     /* Dark borders */
+  --soft: hsl(210 15% 14%);     /* Dark soft backgrounds */
+  --pink: hsl(340 80% 65%);     /* Darker pink accent */
+  --orange: hsl(30 80% 65%);    /* Darker orange accent */
+  --green: hsl(140 50% 60%);    /* Darker green accent */
+}
+
+.bg-app { background: var(--app); }
+.text-app { color: var(--app); }
+.text-app-ink { color: var(--ink); }
+.text-app-muted { color: var(--muted); }
+.border-app-line { border-color: var(--line); }
+.bg-app-soft { background: var(--soft); }
+.bg-pink { background: var(--pink); }
+.bg-orange { background: var(--orange); }
+.bg-green { background: var(--green); }
+
+/* Custom utility classes */
+.bg-app-ink\/90 { background: hsl(210 25% 12% / 0.9); }
+.bg-app-ink\/80 { background: hsl(210 25% 12% / 0.8); }
+.bg-app-soft\/70 { background: hsl(180 33% 96% / 0.7); }
+.bg-app-soft\/90 { background: hsl(180 33% 96% / 0.9); }
+.text-app-ink\/80 { color: hsl(210 25% 12% / 0.8); }
+.text-app-ink\/90 { color: hsl(210 25% 12% / 0.9); }
+.text-app-muted\/70 { color: hsl(210 10% 35% / 0.7); }
+.border-app-ink\/20 { border-color: hsl(210 25% 12% / 0.2); }
+.border-app-ink\/40 { border-color: hsl(210 25% 12% / 0.4); }
+.bg-app-ink\/50 { background: hsl(210 25% 12% / 0.5); }
+
+/* Focus ring utilities */
+.focus-visible\:ring-app-ink\/20:focus-visible {
+  --tw-ring-color: hsl(210 25% 12% / 0.2);
+}
+.focus-visible\:ring-app-ink\/40:focus-visible {
+  --tw-ring-color: hsl(210 25% 12% / 0.4);
+}
+
+/* Hover utilities */
+.hover\:bg-app-ink\/90:hover {
+  background: hsl(210 25% 12% / 0.9);
+}
+.hover\:bg-app-soft\/90:hover {
+  background: hsl(180 33% 96% / 0.9);
+}
+.hover\:text-app-ink:hover {
+  color: hsl(210 25% 12%);
+}
+.hover\:underline:hover {
+  text-decoration: underline;
+}
+
+/* Motion reduction */
+@media (prefers-reduced-motion: reduce) {
+  .motion-reduce\:transition-none {
+    transition: none;
+  }
+}
+
+/* Backdrop filter support */
+@supports (backdrop-filter: blur(1px)) {
+  .supports-\[backdrop-filter\]\:bg-app\/70 {
+    background: hsl(180 33% 98% / 0.7);
+  }
+}
+
+
+
+/* Card hover effects */
+.card {
+  position: relative;
+}
+.card:hover::before {
+  content: "";
+  position: absolute; 
+  inset: 0 0 0 0;
+  border-left: 4px solid var(--green);
+  border-radius: 16px;
+  opacity: 0.8;
+}
+@media (prefers-reduced-motion: reduce){
+  .card:hover { transform: none; }
+} 
