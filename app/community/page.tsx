@@ -3,11 +3,65 @@
 import React from "react";
 import { BRAND, TAGLINE, CONTACT_EMAIL } from "../config";
 import { useContactModal } from "@/components/ContactModalProvider";
+import InsuranceLogos from "@/components/InsuranceLogos";
+
 
 export default function CommunityPage() {
   const [lang, setLang] = React.useState<"en" | "es">("en");
   const { openContactModal } = useContactModal();
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [submitStatus, setSubmitStatus] = React.useState<{
+    success?: boolean;
+    message?: string;
+    error?: string;
+  } | null>(null);
   const t = translations[lang];
+
+  const handleInterestSubmit = async (e: React.FormEvent<HTMLFormElement>, program: 'group' | 'retreat') => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    const formData = new FormData(e.currentTarget);
+    const interestData = {
+      email: formData.get('email') as string,
+      program: program,
+      note: formData.get('note') as string,
+    };
+
+    try {
+      const response = await fetch('/api/program-interest', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(interestData),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setSubmitStatus({ 
+          success: true, 
+          message: 'Thanks! We\'ll keep you updated on upcoming programs.' 
+        });
+        e.currentTarget.reset();
+      } else {
+        setSubmitStatus({ 
+          success: false, 
+          error: result.error || 'We couldn\'t submit the form. Email us at highergroundslp@gmail.com' 
+        });
+      }
+    } catch (error) {
+      console.error('Interest form error:', error);
+      setSubmitStatus({
+        success: false,
+        error: 'We couldn\'t submit the form. Email us at highergroundslp@gmail.com'
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   
   return (
     <main className="min-h-dvh bg-app text-app-ink antialiased">
@@ -69,12 +123,103 @@ export default function CommunityPage() {
           <section id="groups" className="mt-10 border-t border-app-line pt-10">
             <h2 className="text-2xl font-semibold">{t.groups.title}</h2>
             <p className="mt-2 text-app-muted">{t.groups.description}</p>
+            
+            <div className="mt-6 rounded-2xl border border-app-line bg-app-soft p-6">
+              <h3 className="text-lg font-semibold mb-3">Express interest in groups</h3>
+              <form onSubmit={(e) => handleInterestSubmit(e, 'group')} className="space-y-4">
+                <div>
+                  <label htmlFor="group-email" className="block text-sm font-medium text-app-ink/90 mb-2">
+                    Email address
+                  </label>
+                  <input
+                    type="email"
+                    id="group-email"
+                    name="email"
+                    required
+                    className="w-full rounded-xl border border-app-line bg-white/70 px-3 py-2 text-app-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-app-ink/20"
+                    placeholder="your@email.com"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="group-note" className="block text-sm font-medium text-app-ink/90 mb-2">
+                    Additional notes (optional)
+                  </label>
+                  <textarea
+                    id="group-note"
+                    name="note"
+                    rows={3}
+                    className="w-full rounded-xl border border-app-line bg-white/70 px-3 py-2 text-app-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-app-ink/20"
+                    placeholder="Tell us about your interests or questions..."
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full sm:w-auto rounded-xl bg-app-ink px-4 py-2 text-sm font-medium text-app hover:bg-app-ink/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-app-ink/40 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? 'Submitting...' : 'Submit Interest'}
+                </button>
+              </form>
+            </div>
           </section>
 
           <section id="retreats" className="mt-10 border-t border-app-line pt-10">
             <h2 className="text-2xl font-semibold">{t.retreats.title}</h2>
             <p className="mt-2 text-app-muted">{t.retreats.description}</p>
+            
+            <div className="mt-6 rounded-2xl border border-app-line bg-app-soft p-6">
+              <h3 className="text-lg font-semibold mb-3">Express interest in retreats</h3>
+              <form onSubmit={(e) => handleInterestSubmit(e, 'retreat')} className="space-y-4">
+                <div>
+                  <label htmlFor="retreat-email" className="block text-sm font-medium text-app-ink/90 mb-2">
+                    Email address
+                  </label>
+                  <input
+                    type="email"
+                    id="retreat-email"
+                    name="email"
+                    required
+                    className="w-full rounded-xl border border-app-line bg-white/70 px-3 py-2 text-app-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-app-ink/20"
+                    placeholder="your@email.com"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="retreat-note" className="block text-sm font-medium text-app-ink/90 mb-2">
+                    Additional notes (optional)
+                  </label>
+                  <textarea
+                    id="retreat-note"
+                    name="note"
+                    rows={3}
+                    className="w-full rounded-xl border border-app-line bg-white/70 px-3 py-2 text-app-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-app-ink/20"
+                    placeholder="Tell us about your interests or questions..."
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full sm:w-auto rounded-xl bg-app-ink px-4 py-2 text-sm font-medium text-app hover:bg-app-ink/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-app-ink/40 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? 'Submitting...' : 'Submit Interest'}
+                </button>
+              </form>
+            </div>
           </section>
+
+          {/* Status Messages */}
+          {submitStatus && (
+            <div className="mt-6 p-4 rounded-xl border text-sm">
+              {submitStatus.success ? (
+                <div className="text-green-700 bg-green-50 border-green-200">
+                  {submitStatus.message}
+                </div>
+              ) : (
+                <div className="text-red-700 bg-red-50 border-red-200">
+                  {submitStatus.error}
+                </div>
+              )}
+            </div>
+          )}
 
           <section id="newsletter" className="mt-10 border-t border-app-line pt-10">
             <h2 className="text-2xl font-semibold">{t.newsletter.title}</h2>
@@ -95,6 +240,11 @@ export default function CommunityPage() {
       {/* Footer */}
       <footer className="border-t border-app-line">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          {/* Insurance Logos Section */}
+          <div className="mb-8">
+            <InsuranceLogos size="md" showTitle={true} title="We work with these insurance providers:" />
+          </div>
+          
           <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
             <p className="text-sm text-app-muted">© {new Date().getFullYear()} {BRAND}. {t.rights}</p>
             <ul className="flex flex-wrap items-center gap-4 text-sm text-app-muted">
@@ -106,6 +256,21 @@ export default function CommunityPage() {
               <li><a className="hover:underline" href="/privacy">{t.footer.privacy}</a></li>
               <li><a className="hover:underline" href="/land-acknowledgement">{t.footer.landAcknowledgement}</a></li>
             </ul>
+          </div>
+          
+          {/* Website Credit */}
+          <div className="pt-4 border-t border-app-line">
+            <p className="text-xs text-app-muted text-center">
+              Website created by{' '}
+              <a 
+                href="https://www.claritybridgecx.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:underline hover:text-app-ink transition-colors"
+              >
+                ClarityBridge CX
+              </a>
+            </p>
           </div>
         </div>
       </footer>

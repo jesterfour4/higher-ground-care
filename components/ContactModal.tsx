@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { handleContactForm } from "@/app/actions/contact";
-import { ContactFormData } from "@/lib/supabase";
+import { submitContactForm, ContactFormData } from "@/lib/supabase";
 
 interface ContactModalProps {
   isOpen: boolean;
@@ -26,6 +25,13 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
     setSubmitStatus(null);
 
     const formData = new FormData(e.currentTarget);
+    
+    // Debug: Log all form data
+    console.log('Form data collected:');
+    formData.forEach((value, key) => {
+      console.log(`${key}: ${value}`);
+    });
+    
     const contactData: ContactFormData = {
       name: formData.get('name') as string,
       email: formData.get('email') as string,
@@ -33,12 +39,17 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
       childAge: formData.get('age') as string,
       message: formData.get('message') as string,
     };
+    
+    console.log('Contact data object:', contactData);
 
     try {
-      const result = await handleContactForm(contactData);
-      setSubmitStatus(result);
+      console.log('About to call submitContactForm...');
+      const result = await submitContactForm(contactData);
+      console.log('submitContactForm returned:', result);
       
       if (result.success) {
+        console.log('Form submission successful!');
+        setSubmitStatus({ success: true, message: 'Thanks! We\'ll reply within 1–2 business days.' });
         // Reset form on success
         e.currentTarget.reset();
         // Close modal after a short delay to show success message
@@ -46,11 +57,17 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
           onClose();
           setSubmitStatus(null);
         }, 2000);
+      } else {
+        console.log('Form submission failed with result:', result);
+        const errorMessage = result.error || 'We couldn\'t submit the form. Email us at highergroundslp@gmail.com';
+        setSubmitStatus({ success: false, error: errorMessage });
       }
     } catch (error) {
+      console.error('Contact form error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'We couldn\'t submit the form. Email us at highergroundslp@gmail.com';
       setSubmitStatus({
         success: false,
-        error: t.errors.unexpected
+        error: errorMessage
       });
     } finally {
       setIsSubmitting(false);
@@ -163,9 +180,10 @@ function Field({
         {required && <span className="text-red-500 ml-1">*</span>}
       </span>
       {as === "textarea" ? (
-        <textarea id={id} rows={rows} className={shared} required={required} />
+        <textarea name={id} id={id} rows={rows} className={shared} required={required} />
       ) : (
         <input 
+          name={id}
           id={id} 
           type={type} 
           inputMode={inputMode} 

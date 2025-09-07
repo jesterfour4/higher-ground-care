@@ -1,8 +1,12 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { BRAND, TAGLINE, CONTACT_EMAIL } from "./config";
 import { useContactModal } from "@/components/ContactModalProvider";
+import { useReferralModal } from "@/components/ReferralModalProvider";
+import Header from "@/components/Header";
+import InsuranceLogos from "@/components/InsuranceLogos";
 
 // Mobile-first, low-sensory homepage for Higher Ground Speech Therapy
 // TailwindCSS required. Minimal motion, high legibility, and bilingual support (EN/ES).
@@ -11,6 +15,7 @@ import { useContactModal } from "@/components/ContactModalProvider";
 export default function Home() {
   const [lang, setLang] = React.useState<"en" | "es">("en");
   const { openContactModal } = useContactModal();
+  const { openReferralModal } = useReferralModal();
   const t = translations[lang];
 
   return (
@@ -23,46 +28,7 @@ export default function Home() {
       </a>
 
       {/* Header */}
-      <header className="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-app/70 border-b border-app-line">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3">
-          {/* Top row - Logo and actions */}
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-3">
-              <LogoMark />
-              <div className="leading-tight hidden sm:block">
-                <p className="font-semibold tracking-tight text-lg">{BRAND}</p>
-                <p className="text-sm text-app-muted">{t.tagline}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <LangToggle lang={lang} setLang={setLang} />
-              <button 
-                onClick={openContactModal}
-                className="rounded-2xl bg-app-ink/90 px-3 py-2 text-sm font-medium text-app hover:bg-app-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-app-ink/40"
-              >
-                {t.cta}
-              </button>
-              <a
-                href="https://chatgpt.com/g/g-68ab9b39de488191a3feee3a12af6250-higher-ground-guide"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-2xl bg-[color:var(--green)] px-3 py-2 text-sm font-medium text-app-ink/90 hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--green)]/40"
-              >
-                {t.higherGroundGuide}
-              </a>
-            </div>
-          </div>
-          
-          {/* Bottom row - Navigation */}
-          <nav aria-label={t.primaryNav} className="flex items-center justify-center gap-4 sm:gap-6 text-sm">
-            <NavLink href="/">Home</NavLink>
-            <NavLink href="/services">Services</NavLink>
-            <NavLink href="/the-center">The Center</NavLink>
-            <NavLink href="/community">Community</NavLink>
-            <NavLink href="/about">About Us</NavLink>
-          </nav>
-        </div>
-      </header>
+      <Header lang={lang} setLang={setLang} openContactModal={openContactModal} />
 
       {/* HERO with hero background image and Laura spotlight */}
       <section id="content" aria-labelledby="hero-title" className="relative overflow-hidden border-b border-app-line">
@@ -80,7 +46,7 @@ export default function Home() {
 
         <div className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 md:py-16 lg:px-8 lg:py-20">
           {/* Mobile-first layout */}
-          <div className="grid grid-cols-1 items-center gap-6 sm:gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">
+          <div className="grid grid-cols-1 items-center gap-6 sm:gap-8 lg:grid-cols-[1fr_1fr] lg:gap-16">
             <div className="relative z-10 text-center lg:text-left">
               <h1 id="hero-title" className="text-3xl font-bold tracking-tight text-white drop-shadow-lg sm:text-4xl md:text-5xl lg:text-6xl">
                 {t.hero.title}
@@ -96,7 +62,13 @@ export default function Home() {
                 >
                   {t.hero.primary}
                 </button>
-                <a href="#mission" className="w-full sm:w-auto rounded-2xl bg-[color:var(--green)] px-5 py-3 text-sm font-medium text-app-ink/90 hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--green)]/40">
+                <button 
+                  onClick={openReferralModal}
+                  className="w-full sm:w-auto rounded-2xl bg-[color:var(--pink)] px-5 py-3 text-sm font-medium text-app-ink/90 hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pink)]/40"
+                >
+                  {t.hero.referral}
+                </button>
+                <a href="/services" className="w-full sm:w-auto rounded-2xl bg-[color:var(--green)] px-5 py-3 text-sm font-medium text-app-ink/90 hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--green)]/40">
                   {t.hero.secondary}
                 </a>
               </div>
@@ -109,23 +81,31 @@ export default function Home() {
               </ul>
             </div>
 
-            {/* Laura spotlight - responsive circular image */}
-            <figure className="relative z-10 order-first lg:order-last">
-              <div className="relative mx-auto w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 xl:w-80 xl:h-80">
-                <img
+            {/* Laura spotlight - large featured image with fade effect */}
+            <div className="relative order-first lg:order-last">
+              {/* Large Laura image that takes up the right side */}
+              <div className="relative w-full h-80 sm:h-96 md:h-[28rem] lg:h-[32rem] xl:h-[36rem]">
+                <Image
                   src="/images/laura-profile.jpg"
                   alt={t.hero.alt}
-                  className="w-full h-full object-cover rounded-full border-4 border-white/80 shadow-2xl"
-                  loading="eager"
-                  decoding="async"
+                  fill
+                  className="object-cover object-center rounded-2xl lg:rounded-3xl border-4 border-white/80 shadow-2xl"
+                  priority
+                  style={{
+                    objectPosition: 'center 20%', // Focus on her face
+                  }}
                 />
-                {/* Enhanced badge with shadow and border */}
-                <figcaption className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 rounded-full border border-white/60 bg-white/90 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium text-app-ink shadow-lg backdrop-blur">
-                  <span className="inline-block size-2 rounded-full align-[-2px]" style={{background:"var(--green)"}} />
-                  <span className="ml-2">Laura Allred, MS, CCC-SLP</span>
-                </figcaption>
+                
+                {/* Fade gradient overlay to blend with background */}
+                <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-black/20 rounded-2xl lg:rounded-3xl" />
+                
+                {/* Enhanced badge positioned at bottom */}
+                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 rounded-full border border-white/60 bg-white/95 px-4 py-2 text-sm font-medium text-app-ink shadow-xl backdrop-blur-sm">
+                  <span className="inline-block size-2 rounded-full align-[-2px] mr-2" style={{background:"var(--green)"}} />
+                  Laura Allred, MS, CCC-SLP
+                </div>
               </div>
-            </figure>
+            </div>
           </div>
         </div>
 
@@ -225,6 +205,82 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Testimonials */}
+      <section aria-labelledby="testimonials" className="border-b border-app-line bg-app-soft">
+        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
+          <h2 id="testimonials" className="h2">Families say…</h2>
+          <ul className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
+            {[
+              ["Warm, clear, and empowering.","Parent of a 6-year-old"],
+              ["Our child looks forward to sessions.","Parent of a 9-year-old"],
+              ["Low-sensory design made a huge difference.","Caregiver testimonial"]
+            ].map(([quote, who])=>(
+              <li key={quote} className="rounded-2xl border border-app-line bg-white/70 p-5">
+                <p className="text-sm text-app-ink/90">"{quote}"</p>
+                <p className="mt-2 text-xs text-app-muted">— {who}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* Healthcare Provider Referrals */}
+      <section aria-labelledby="referrals" className="border-b border-app-line">
+        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 items-center">
+            <div>
+              <h2 id="referrals" className="text-2xl sm:text-3xl font-semibold tracking-tight">Healthcare Provider Referrals</h2>
+              <p className="mt-3 text-app-muted">
+                Partner with us to provide comprehensive speech therapy and family support services for your clients. 
+                We make the referral process simple and ensure seamless care coordination.
+              </p>
+              <ul className="mt-6 space-y-2 text-sm text-app-muted">
+                <li className="flex items-center gap-2"><Dot />Seamless care coordination</li>
+                <li className="flex items-center gap-2"><Dot />Evidence-based practice</li>
+                <li className="flex items-center gap-2"><Dot />Flexible scheduling options</li>
+                <li className="flex items-center gap-2"><Dot />Regular progress updates</li>
+              </ul>
+              <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                <a
+                  href="/referrals"
+                  className="inline-block rounded-2xl bg-[color:var(--pink)] px-5 py-2.5 text-sm font-medium text-app-ink/90 hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pink)]/40"
+                >
+                  Submit a Referral
+                </a>
+                <a
+                  href="mailto:referrals@highergroundcare.com"
+                  className="inline-block rounded-2xl border border-app-line bg-white/70 px-5 py-2.5 text-sm font-medium text-app-ink hover:bg-white/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-app-ink/20"
+                >
+                  Contact Referrals Team
+                </a>
+              </div>
+              <div className="mt-4 text-sm text-app-muted">
+                <p>Referral fax number available upon request by phone or through our Higher Ground Guide.</p>
+              </div>
+            </div>
+            <div className="relative">
+              <div className="rounded-2xl border border-app-line bg-app-soft p-6">
+                <h3 className="text-lg font-semibold mb-4">Quick Referral Process</h3>
+                <ol className="space-y-3 text-sm text-app-muted">
+                  <li className="flex items-start gap-3">
+                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[color:var(--pink)] text-white text-xs font-medium flex items-center justify-center">1</span>
+                    <span>Complete our simple referral form with client information</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[color:var(--orange)] text-white text-xs font-medium flex items-center justify-center">2</span>
+                    <span>We contact you within 24 hours to discuss next steps</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-[color:var(--green)] text-white text-xs font-medium flex items-center justify-center">3</span>
+                    <span>Seamless handoff with regular progress updates</span>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Our Approach */}
       <section id="approach" className="border-b border-app-line">
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 md:py-20 lg:px-8">
@@ -258,11 +314,38 @@ export default function Home() {
         </div>
       </section>
 
-
+      {/* FAQ */}
+      <section aria-labelledby="faq" className="border-b border-app-line">
+        <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
+          <h2 id="faq" className="h2">Questions we hear often</h2>
+          <dl className="mt-6 divide-y divide-app-line rounded-2xl border border-app-line bg-app-soft">
+            {[
+              ["Do you take insurance?","We provide superbills and can discuss options during your consult."],
+              ["Is telehealth available?","Yes—secure sessions for families who need flexibility."],
+              ["Is the space low-sensory?","Yes. Lighting, pacing, and routines are designed for regulation."]
+            ].map(([q,a])=>(
+              <div key={q} className="p-5">
+                <dt className="h3">{q}</dt>
+                <dd className="mt-2 text-sm text-app-muted">{a}</dd>
+                {q === "Do you take insurance?" && (
+                  <div className="mt-4">
+                    <InsuranceLogos size="sm" showTitle={true} title="We work with these insurance providers:" />
+                  </div>
+                )}
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
 
       {/* Footer */}
       <footer className="border-t border-app-line">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          {/* Insurance Logos Section */}
+          <div className="mb-8">
+            <InsuranceLogos size="md" showTitle={true} title="We work with these insurance providers:" />
+          </div>
+          
           <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
             <p className="text-sm text-app-muted">© {new Date().getFullYear()} {BRAND}. {t.rights}</p>
             <ul className="flex flex-wrap items-center gap-4 text-sm text-app-muted">
@@ -270,10 +353,26 @@ export default function Home() {
               <li><a className="hover:underline" href="/services">Services</a></li>
               <li><a className="hover:underline" href="/the-center">The Center</a></li>
               <li><a className="hover:underline" href="/community">Community</a></li>
+              <li><a className="hover:underline" href="/referrals">Referrals</a></li>
               <li><a className="hover:underline" href="/about">About Us</a></li>
               <li><a className="hover:underline" href="/privacy">{t.footer.privacy}</a></li>
               <li><a className="hover:underline" href="/land-acknowledgement">Land Acknowledgement</a></li>
             </ul>
+          </div>
+          
+          {/* Website Credit */}
+          <div className="pt-4 border-t border-app-line">
+            <p className="text-xs text-app-muted text-center">
+              Website created by{' '}
+              <a 
+                href="https://www.claritybridgecx.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:underline hover:text-app-ink transition-colors"
+              >
+                ClarityBridge CX
+              </a>
+            </p>
           </div>
         </div>
       </footer>
@@ -305,26 +404,7 @@ function Card({ title, body }: { title: string; body: string }) {
 
 
 
-function LangToggle({ lang, setLang, }: { lang: "en" | "es"; setLang: React.Dispatch<React.SetStateAction<"en" | "es">>; }) {
-  return (
-    <div className="inline-flex items-center rounded-xl border border-app-line bg-app-soft p-1" role="group" aria-label="Language toggle">
-      <button onClick={() => setLang("en")} className={`rounded-lg px-3 py-1.5 text-xs font-medium ${lang === "en" ? "bg-white shadow-sm" : "opacity-70 hover:opacity-100"}`} aria-pressed={lang === "en"}>EN</button>
-      <button onClick={() => setLang("es")} className={`rounded-lg px-3 py-1.5 text-xs font-medium ${lang === "es" ? "bg-white shadow-sm" : "opacity-70 hover:opacity-100"}`} aria-pressed={lang === "es"}>ES</button>
-    </div>
-  );
-}
 
-function LogoMark() {
-  return (
-    <div className="flex items-center">
-      <img
-        src="/images/hgst-logo.png"
-                 alt="Higher Ground Care logo"
-        className="h-12 w-auto object-contain"
-      />
-    </div>
-  );
-}
 
 function WaveDivider() {
   return (
@@ -389,7 +469,7 @@ const translations = {
     nav: { mission: "Mission", approach: "Our Approach", laura: "Meet Laura", contact: "Contact" },
     cta: "Get started",
     higherGroundGuide: "Higher Ground Guide",
-    hero: { title: "Find care for your child with ease", lead: "We make it simple for families to access compassionate, evidence-based speech therapy. Clear steps. Low-sensory spaces. Real progress.", primary: "Book a free consult", secondary: "See how we help", alt: "Portrait of Laura Allred, MS, CCC-SLP, smiling in a calm, light-filled space." },
+    hero: { title: "Find care for your child with ease", lead: "We make it simple for families to access compassionate, evidence-based speech therapy. Clear steps. Low-sensory spaces. Real progress.", primary: "Book a free consult", referral: "Submit Referral", secondary: "See services", alt: "Portrait of Laura Allred, MS, CCC-SLP, smiling in a calm, light-filled space." },
     keyPoints: "Key points",
     points: { one: "Easy scheduling and clear next steps", two: "Low-sensory, neuro-affirming environment", three: "Bilingual support: English and Spanish", four: "In-clinic and telehealth options" },
     mission: { title: "Mission & Vision", mission: "Our Mission", missionBody: "Our mission is to make it easy for families to find care for their children through compassionate, evidence-based therapy that meets each child where they are. We reduce stress for families by simplifying the process, providing clear next steps, and fostering an environment of trust and belonging.", vision: "Our Vision", visionBody: "Our vision is to nurture a world where care is accessible to all, differences are honored as strengths, and families find a true sense of belonging." },
@@ -407,7 +487,7 @@ const translations = {
     nav: { mission: "Misión", approach: "Enfoque", laura: "Conoce a Laura", contact: "Contacto" },
     cta: "Empezar",
     higherGroundGuide: "Guía de Higher Ground",
-    hero: { title: "Encuentra atención para tu hij@ con facilidad", lead: "Facilitamos el acceso a terapia del habla compasiva y basada en evidencia. Pasos claros. Espacios de baja estimulación. Progreso real.", primary: "Agenda una consulta gratis", secondary: "Cómo ayudamos", alt: "Retrato de Laura Allred, MS, CCC-SLP, en un espacio tranquilo y luminoso." },
+    hero: { title: "Encuentra atención para tu hij@ con facilidad", lead: "Facilitamos el acceso a terapia del habla compasiva y basada en evidencia. Pasos claros. Espacios de baja estimulación. Progreso real.", primary: "Agenda una consulta gratis", referral: "Enviar Referencia", secondary: "Ver servicios", alt: "Retrato de Laura Allred, MS, CCC-SLP, en un espacio tranquilo y luminoso." },
     keyPoints: "Puntos clave",
     points: { one: "Citas fáciles y próximos pasos claros", two: "Ambiente de baja estimulación, neuroafirmativo", three: "Apoyo bilingüe: inglés y español", four: "Opciones en clínica y por telemedicina" },
     mission: { title: "Misión y Visión", mission: "Nuestra Misión", missionBody: "Nuestra misión es facilitar que las familias encuentren atención para sus hij@s a través de terapia compasiva y basada en evidencia que se adapte a cada niñ@ donde esté. Reducimos el estrés de las familias simplificando el proceso, proporcionando próximos pasos claros y fomentando un ambiente de confianza y pertenencia.", vision: "Nuestra Visión", visionBody: "Nuestra visión es nutrir un mundo donde el cuidado sea accesible para tod@s, las diferencias sean honradas como fortalezas, y las familias encuentren un verdadero sentido de pertenencia." },

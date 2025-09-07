@@ -3,6 +3,8 @@
 import React from "react";
 import { BRAND, CONTACT_EMAIL } from "../config";
 import { useContactModal } from "@/components/ContactModalProvider";
+import InsuranceLogos from "@/components/InsuranceLogos";
+
 
 export default function PrivacyPage() {
   const [lang, setLang] = React.useState<"en" | "es">("en");
@@ -133,6 +135,11 @@ export default function PrivacyPage() {
       {/* Footer */}
       <footer className="border-t border-app-line">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          {/* Insurance Logos Section */}
+          <div className="mb-8">
+            <InsuranceLogos size="md" showTitle={true} title="We work with these insurance providers:" />
+          </div>
+          
           <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
             <p className="text-sm text-app-muted">© {new Date().getFullYear()} {BRAND}. {t.rights}</p>
             <ul className="flex flex-wrap items-center gap-4 text-sm text-app-muted">
@@ -144,6 +151,21 @@ export default function PrivacyPage() {
               <li><a className="hover:underline" href="/privacy">{t.footer.privacy}</a></li>
               <li><a className="hover:underline" href="/land-acknowledgement">{t.footer.landAcknowledgement}</a></li>
             </ul>
+          </div>
+          
+          {/* Website Credit */}
+          <div className="pt-4 border-t border-app-line">
+            <p className="text-xs text-app-muted text-center">
+              Website created by{' '}
+              <a 
+                href="https://www.claritybridgecx.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:underline hover:text-app-ink transition-colors"
+              >
+                ClarityBridge CX
+              </a>
+            </p>
           </div>
         </div>
       </footer>

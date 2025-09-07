@@ -6,6 +6,8 @@ import Section from "@/components/Section";
 import Gallery from "@/components/Gallery";
 import Callout from "@/components/Callout";
 import { useContactModal } from "@/components/ContactModalProvider";
+import InsuranceLogos from "@/components/InsuranceLogos";
+
 
 export default function TheCenterPage() {
   const [lang, setLang] = React.useState<"en" | "es">("en");
@@ -88,6 +90,19 @@ export default function TheCenterPage() {
             <p className="mt-4 text-lg text-white/80 drop-shadow-sm">
               {t.hero.description}
             </p>
+            
+            <div className="mt-6 flex flex-wrap gap-2 text-sm" role="navigation" aria-label="Explore sections">
+              {[
+                ["#indoor","Indoor spaces"],
+                ["#outdoor","Outdoor therapy"],
+                ["#parent-palace","Parent Palace"],
+              ].map(([href,label])=>(
+                <a key={href} href={href}
+                  className="rounded-full border border-app-line bg-white/70 px-3 py-1 hover:bg-white">
+                  {label}
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -237,9 +252,30 @@ export default function TheCenterPage() {
         </form>
       </Section>
 
+      {/* Experience flow */}
+      <Section title="Your visit experience" lead="What a calm session can feel like.">
+        <ol className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {[
+            ["Arrive & regulate","Soft light, quiet pacing, predictable check-in."],
+            ["Therapy time","Indoor or outdoor session—child-led and strength-based."],
+            ["Caregiver care","Parent Palace: tea, reading, learning, or a moment to exhale."]
+          ].map(([t,b])=>(
+            <li key={t} className="rounded-2xl border border-app-line bg-white/70 p-4">
+              <p className="text-sm font-semibold">{t}</p>
+              <p className="mt-1 text-sm text-app-muted">{b}</p>
+            </li>
+          ))}
+        </ol>
+      </Section>
+
       {/* Footer */}
       <footer className="border-t border-app-line">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          {/* Insurance Logos Section */}
+          <div className="mb-8">
+            <InsuranceLogos size="md" showTitle={true} title="We work with these insurance providers:" />
+          </div>
+          
           <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
             <p className="text-sm text-app-muted">© {new Date().getFullYear()} {BRAND}. {t.rights}</p>
             <ul className="flex flex-wrap items-center gap-4 text-sm text-app-muted">
@@ -251,6 +287,21 @@ export default function TheCenterPage() {
               <li><a className="hover:underline" href="/privacy">{t.footer.privacy}</a></li>
               <li><a className="hover:underline" href="/land-acknowledgement">{t.footer.landAcknowledgement}</a></li>
             </ul>
+          </div>
+          
+          {/* Website Credit */}
+          <div className="pt-4 border-t border-app-line">
+            <p className="text-xs text-app-muted text-center">
+              Website created by{' '}
+              <a 
+                href="https://www.claritybridgecx.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:underline hover:text-app-ink transition-colors"
+              >
+                ClarityBridge CX
+              </a>
+            </p>
           </div>
         </div>
       </footer>

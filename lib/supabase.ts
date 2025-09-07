@@ -1,9 +1,4 @@
-import { createClient } from '@supabase/supabase-js'
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+import { supabase } from './supabase/client'
 
 // Types for the contact form data
 export interface ContactFormData {
@@ -18,6 +13,12 @@ export interface ContactFormData {
 // Function to submit contact form data
 export async function submitContactForm(data: ContactFormData) {
   try {
+    console.log('Supabase: Starting submission with data:', data);
+    console.log('Supabase: URL and key check:', { 
+      hasUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL, 
+      hasKey: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY 
+    });
+    
     const { data: result, error } = await supabase
       .from('contact_submissions')
       .insert([
@@ -32,14 +33,16 @@ export async function submitContactForm(data: ContactFormData) {
       ])
       .select()
 
+    console.log('Supabase: Insert result:', { result, error });
+
     if (error) {
       console.error('Error submitting form:', error)
-      throw error
+      return { success: false, error: error.message || 'Database error occurred' }
     }
 
     return { success: true, data: result }
   } catch (error) {
     console.error('Error submitting form:', error)
-    return { success: false, error }
+    return { success: false, error: error instanceof Error ? error.message : 'An unexpected error occurred' }
   }
 }

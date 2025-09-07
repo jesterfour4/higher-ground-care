@@ -5,25 +5,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  --app: hsl(180 33% 98%);      /* Light background */
-  --ink: hsl(210 25% 12%);      /* Dark text */
-  --muted: hsl(210 10% 35%);    /* Muted text */
-  --line: hsl(200 20% 90%);     /* Light borders */
-  --soft: hsl(180 33% 96%);     /* Soft backgrounds */
-  --pink: hsl(340 80% 80%);     /* Pink accent */
-  --orange: hsl(30 80% 80%);    /* Orange accent */
-  --green: hsl(140 50% 75%);    /* Green accent */
+  --app: hsl(180 33% 98%);
+  --ink: hsl(210 25% 12%);
+  --muted: hsl(210 10% 35%);
+  --line: hsl(200 20% 90%);
+  --soft: hsl(180 33% 96%);
+
+  /* accents */
+  --pink: hsl(340 70% 78%);
+  --orange: hsl(28 80% 76%);
+  --green: hsl(142 45% 68%);
+
+  /* shadows & radii */
+  --shadow-soft: 0 6px 16px rgba(0,0,0,.06);
+  --radius-lg: 1.25rem;
 }
 
 .dark:root {
-  --app: hsl(210 15% 10%);      /* Dark background */
-  --ink: hsl(0 0% 98%);         /* Light text */
-  --muted: hsl(210 10% 70%);    /* Light muted text */
-  --line: hsl(210 10% 20%);     /* Dark borders */
-  --soft: hsl(210 15% 14%);     /* Dark soft backgrounds */
-  --pink: hsl(340 80% 65%);     /* Darker pink accent */
-  --orange: hsl(30 80% 65%);    /* Darker orange accent */
-  --green: hsl(140 50% 60%);    /* Darker green accent */
+  --app: hsl(210 15% 10%);
+  --ink: hsl(0 0% 98%);
+  --muted: hsl(210 10% 70%);
+  --line: hsl(210 10% 20%);
+  --soft: hsl(210 15% 14%);
+  --pink: hsl(340 70% 64%);
+  --orange: hsl(28 80% 62%);
+  --green: hsl(142 45% 58%);
 }
 
 .bg-app { background: var(--app); }
@@ -35,6 +41,17 @@
 .bg-pink { background: var(--pink); }
 .bg-orange { background: var(--orange); }
 .bg-green { background: var(--green); }
+
+/* type scale */
+.h1 { font-size: clamp(2rem, 2vw + 1.6rem, 3rem); line-height: 1.1; letter-spacing: -0.01em; }
+.h2 { font-size: clamp(1.5rem, 1.4vw + 1.2rem, 2.25rem); line-height: 1.15; }
+.h3 { font-size: 1.125rem; font-weight: 600; }
+.lead { color: var(--muted); }
+
+/* motion guard */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
 
 /* Custom utility classes */
 .bg-app-ink\/90 { background: hsl(210 25% 12% / 0.9); }

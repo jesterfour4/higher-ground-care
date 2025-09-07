@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { ContactModalProvider } from '@/components/ContactModalProvider'
+import { ReferralModalProvider } from '@/components/ReferralModalProvider'
 import FeedbackBubble from '@/components/FeedbackBubble'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -69,10 +70,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        <link rel="preload" href="/images/hero-background.jpg" as="image" />
+        <link rel="preload" href="/images/laura-profile.jpg" as="image" />
+      </head>
       <body className={inter.className}>
         <ContactModalProvider>
-          {children}
-          <FeedbackBubble />
+          <ReferralModalProvider>
+            {children}
+            <FeedbackBubble />
+          </ReferralModalProvider>
         </ContactModalProvider>
       </body>
     </html>

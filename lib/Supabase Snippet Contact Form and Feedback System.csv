@@ -1,0 +1,8 @@
+schemaname,tablename,policyname,permissive,roles,cmd,qual,with_check
+public,contact_submissions,Allow public insert on contact_submissions,PERMISSIVE,{public},INSERT,null,true
+public,contact_submissions,Allow authenticated users to view contact_submissions,PERMISSIVE,{public},SELECT,(auth.role() = 'authenticated'::text),null
+public,contact_submissions,Allow authenticated users to update contact_submissions,PERMISSIVE,{public},UPDATE,(auth.role() = 'authenticated'::text),null
+public,contact_submissions,Allow insert for all,PERMISSIVE,{public},INSERT,null,true
+public,contact_submissions,Authenticated users can insert,PERMISSIVE,{public},INSERT,null,(auth.uid() IS NOT NULL)
+public,contact_submissions,Allow public insert,PERMISSIVE,{public},INSERT,null,true
+public,contact_submissions,Allow authenticated read,PERMISSIVE,{public},SELECT,(auth.role() = 'authenticated'::text),null

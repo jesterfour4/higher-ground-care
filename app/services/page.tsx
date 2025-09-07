@@ -3,6 +3,8 @@
 import React from "react";
 import { BRAND, TAGLINE, CONTACT_EMAIL } from "../config";
 import { useContactModal } from "@/components/ContactModalProvider";
+import InsuranceLogos from "@/components/InsuranceLogos";
+
 
 export default function ServicesPage() {
   const [lang, setLang] = React.useState<"en" | "es">("en");
@@ -110,9 +112,12 @@ export default function ServicesPage() {
           <div className="mt-10 rounded-2xl border border-app-line bg-app-soft p-5">
             <h2 className="text-xl font-semibold">{t.insurance.title}</h2>
             <p className="mt-2 text-app-muted">{t.insurance.description}</p>
+            <div className="mt-4">
+              <InsuranceLogos size="sm" showTitle={true} title="We work with these insurance providers:" />
+            </div>
             <button 
               onClick={openContactModal}
-              className="mt-4 inline-block rounded-2xl bg-app-ink px-5 py-2.5 text-sm font-medium text-app hover:bg-app-ink/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-app-ink/40"
+              className="mt-6 inline-block rounded-2xl bg-app-ink px-5 py-2.5 text-sm font-medium text-app hover:bg-app-ink/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-app-ink/40"
             >
               {t.insurance.button}
             </button>
@@ -135,6 +140,11 @@ export default function ServicesPage() {
       {/* Footer */}
       <footer className="border-t border-app-line">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          {/* Insurance Logos Section */}
+          <div className="mb-8">
+            <InsuranceLogos size="md" showTitle={true} title="We work with these insurance providers:" />
+          </div>
+          
           <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
             <p className="text-sm text-app-muted">© {new Date().getFullYear()} {BRAND}. {t.rights}</p>
             <ul className="flex flex-wrap items-center gap-4 text-sm text-app-muted">
@@ -146,6 +156,21 @@ export default function ServicesPage() {
               <li><a className="hover:underline" href="/privacy">{t.footer.privacy}</a></li>
               <li><a className="hover:underline" href="/land-acknowledgement">{t.footer.landAcknowledgement}</a></li>
             </ul>
+          </div>
+          
+          {/* Website Credit */}
+          <div className="pt-4 border-t border-app-line">
+            <p className="text-xs text-app-muted text-center">
+              Website created by{' '}
+              <a 
+                href="https://www.claritybridgecx.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:underline hover:text-app-ink transition-colors"
+              >
+                ClarityBridge CX
+              </a>
+            </p>
           </div>
         </div>
       </footer>
